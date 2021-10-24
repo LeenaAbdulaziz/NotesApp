@@ -1,6 +1,7 @@
 package com.example.notesapp
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import kotlinx.android.synthetic.main.item.view.*
 
 //import kotlinx.android.synthetic.main.single_item.view.*
 
-class RecycleView(val context: Context, val notes: ArrayList<String>) : RecyclerView.Adapter<RecycleView.recyclerViewHolder>() {
+class RecycleView(val activity: MainActivity, val notes: ArrayList<Note>) : RecyclerView.Adapter<RecycleView.recyclerViewHolder>() {
     class recyclerViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView)
 
 
@@ -27,8 +28,21 @@ class RecycleView(val context: Context, val notes: ArrayList<String>) : Recycler
         val note = notes[position]
 
         holder.itemView.apply {
+            if (position % 2 == 0) {
+                lll.setBackgroundColor(Color.GRAY)
+                textview2.setTextColor(Color.WHITE)
+            } else {
+                lll.setBackgroundColor(Color.WHITE)
+                textview2.setTextColor(Color.BLACK)
+            }
+            textview2.text = note.note
 
-            textview2.text = note
+            imageView.setOnClickListener {
+                activity.showDialog(note)
+            }
+            imageView2.setOnClickListener {
+                activity.confirm(note)
+            }
         }}
 
 

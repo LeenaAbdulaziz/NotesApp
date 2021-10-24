@@ -11,7 +11,7 @@ class DBHlpr(context: Context):SQLiteOpenHelper(context,"details",null,1) {
     var database:SQLiteDatabase=writableDatabase
     override fun onCreate(p0: SQLiteDatabase?) {
         if (p0 != null) {
-            p0.execSQL("Create table Notes(Note text)")
+            p0.execSQL("Create table Notes(id INTEGER PRIMARY KEY,Note text)")
         }
     }
 
@@ -26,17 +26,31 @@ class DBHlpr(context: Context):SQLiteOpenHelper(context,"details",null,1) {
         return status
     }
 
-    fun retrieve():ArrayList<String> {
-       var noteList= arrayListOf<String>()
+    fun retrieve():ArrayList<Note> {
+       var noteList= arrayListOf<Note>()
         var c:Cursor=database.query("Notes",null,null,
             null,null,null,null)
 
         c.moveToFirst()
         while( !c.isAfterLast){
-             var note =c.getString(c.getColumnIndex("Note"))
-            noteList.add(note)
+             val id =c.getInt(c.getColumnIndex("id"))
+             val note =c.getString(c.getColumnIndex("Note"))
+            noteList.add(Note(id,note))
             c.moveToNext()
         }
         return noteList
+    }
+
+    fun delete(note: Note) {
+        database.delete("Notes","id=${note.id}", null)
+
+    }
+
+    fun update(note: Note){
+        val content=ContentValues()
+        content.put("id",note.id)
+        content.put("note",note.note)
+        database.update("Notes",content,"id=${note.id}", null)
+
     }
 }
