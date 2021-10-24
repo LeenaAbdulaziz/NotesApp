@@ -1,7 +1,9 @@
 package com.example.notesapp
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -22,5 +24,19 @@ class DBHlpr(context: Context):SQLiteOpenHelper(context,"details",null,1) {
         content.put("Note",s)
        var status= database.insert("Notes",null,content)
         return status
+    }
+
+    fun retrieve():ArrayList<String> {
+       var noteList= arrayListOf<String>()
+        var c:Cursor=database.query("Notes",null,null,
+            null,null,null,null)
+
+        c.moveToFirst()
+        while( !c.isAfterLast){
+             var note =c.getString(c.getColumnIndex("Note"))
+            noteList.add(note)
+            c.moveToNext()
+        }
+        return noteList
     }
 }

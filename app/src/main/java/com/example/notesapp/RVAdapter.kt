@@ -27,8 +27,10 @@ class RecycleView(val context: Context, val notes: ArrayList<String>) : Recycler
         val note = notes[position]
 
         holder.itemView.apply {
+
             textview2.text = note
         }}
+
 
     override fun getItemCount()=notes.size
 }
